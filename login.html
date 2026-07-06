@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - CINEWORLD</title>
+</head>
+<body>
+    <h2>Login Page</h2>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <button id="loginBtn">Login</button>
+
+    <script type="module" src="app.js"></script>
+    <script type="module">
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        
+        const auth = getAuth();
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            signInWithEmailAndPassword(auth, email, password)
+              .then((userCredential) => {
+                alert("Login සාර්ථකයි! 🎉");
+              })
+              .catch((error) => {
+                alert("වැරදියි: " + error.message);
+              });
+        });
+    </script>
+</body>
+</html>
