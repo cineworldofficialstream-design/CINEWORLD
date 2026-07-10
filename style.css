@@ -1,0 +1,54 @@
+/* මුළු පිටුවේම පසුබිම හැඩගැන්වීම */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #141414; /* Netflix වගේ කළු පසුබිමක් */
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* සිරස්ව මැදට ගැනීමට */
+}
+
+/* මැද තියෙන කොටුව (Card) හැඩගැන්වීම */
+.card {
+    text-align: center;
+    background-color: #1f1f1f;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+}
+
+/* ප්‍රධාන මාතෘකාව */
+h1 {
+    color: #e50914; /* රතු පාට Accent එකක් */
+    margin-bottom: 15px;
+    font-size: 28px;
+}
+
+/* විස්තර වැකිය */
+p {
+    font-size: 16px;
+    color: #cccccc;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+/* බටන් එක හැඩගැන්වීම */
+.btn {
+    display: inline-block;
+    background-color: #e50914;
+    color: #ffffff;
+    padding: 12px 24px;
+    text-decoration: none; /* යටින් ඉර ඇඳීම ඉවත් කිරීමට */
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+/* මවුස් එක බටන් එක උඩට ගෙනියද්දී වෙනස් වීම */
+.btn:hover {
+    background-color: #b80710;
+}
