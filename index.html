@@ -1,56 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineStream | Stream Unlimited Movies & TV Shows</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>Cineworld Official - Streaming</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
-
 <body>
 
-    <div class="login-wrapper">
+    <div class="card" id="auth-container">
+        <h1>Cineworld</h1>
+        <p>වීඩියෝ සහ චිත්‍රපට නැරඹීම සඳහා කරුණාකර ඔබගේ ගිණුමකින් ලොග් වන්න.</p>
         
-        <div class="logo">
-            <span>CINE</span>STREAM
+        <div class="login-buttons">
+            <button id="google-btn" class="btn btn-google"><i class="fab fa-google"></i> Continue with Google</button>
+            <button id="facebook-btn" class="btn btn-facebook"><i class="fab fa-facebook-f"></i> Continue with Facebook</button>
+            <button id="twitter-btn" class="btn btn-twitter"><i class="fab fa-twitter"></i> Continue with X / Twitter</button>
         </div>
-
-        <div class="content-box">
-            <h1>Unlimited movies, TV shows, and more.</h1>
-            <p>Watch anywhere. Cancel anytime.</p>
-            <p class="sub-text">වීඩියෝ නැරඹීම ආරම්භ කිරීමට කරුණාකර ඔබගේ ගිණුමකින් ලොග් වන්න.</p>
-        </div>
-
-        <div class="social-login-container">
-            
-            <a href="#" class="btn-social google">
-                <i class="fab fa-google"></i> Sign In with Google
-            </a>
-
-            <a href="#" class="btn-social facebook">
-                <i class="fab fa-facebook-f"></i> Sign In with Facebook
-            </a>
-
-            <a href="#" class="btn-social twitter">
-                <i class="fab fa-x-twitter"></i> Sign In with X / Twitter
-            </a>
-            
-        </div>
-
-        <div class="footer-note">
-            <p>By signing in, you agree to our Terms of Service and Privacy Policy.</p>
-        </div>
-
     </div>
 
+    <div class="main-content" id="main-content" style="display: none;">
+        <header>
+            <h2>Cineworld Streaming</h2>
+            <div id="user-profile"></div>
+        </header>
+        <main>
+            <div class="welcome-box">
+                <h3>සාදරයෙන් පිළිගනිමු!</h3>
+                <p>ඔබ දැන් සාර්ථකව ලොග් වී ඇත. දැන් ඔබට චිත්‍රපට නැරඹිය හැකිය.</p>
+            </div>
+            </main>
+    </div>
+
+    <script type="module" src="script.js"></script>
 </body>
-</html>
+    </html>
