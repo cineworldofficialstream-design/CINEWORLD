@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// 1. ඔයාගේ Firebase Config විස්තර මෙතනට ඇතුළත් කරන්න
+// 1. Firebase Config විස්තර (ඔයාගේ Firebase Console එකෙන් ගන්න)
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_AUTH_DOMAIN",
@@ -11,52 +11,91 @@ const firebaseConfig = {
     appId: "YOUR_APP_ID"
 };
 
-// Firebase ඉනිට් කිරීම
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// HTML එකේ තියෙන කොටස් Code එකට සම්බන්ධ කරගැනීම
+// TMDB API සැකසුම් (චිත්‍රපට ඔටෝ ලෝඩ් වෙන්න)
+// ⚠️ TMDB එකෙන් ඔයාට ලැබෙන API Key එක මේ 'YOUR_TMDB_API_KEY' වෙනුවට දාන්න.
+const TMDB_API_KEY = "YOUR_TMDB_API_KEY"; 
+const BASE_URL = "https://api.themoviedb.org/3";
+const IMG_URL = "https://image.tmdb.org/t/p/w500";
+
+// HTML Element සම්බන්ධ කරගැනීම
 const authContainer = document.getElementById('auth-container');
 const mainContent = document.getElementById('main-content');
 const googleBtn = document.getElementById('google-btn');
 const userProfile = document.getElementById('user-profile');
 
-// 2. පරිශීලකයා දැනටමත් ලොග් වෙලාද නැද්ද කියලා නිරන්තරයෙන් පරීක්ෂා කිරීම (Auth State Listener)
+// 2. Firebase Auth Listener (ලොග් වෙලාද නැද්ද පරීක්ෂාව)
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        // පරිශීලකයා ලොග් වී ඇත්නම්: Login Card එක සඟවා Main Content එක පෙන්වන්න
         authContainer.style.display = 'none';
         mainContent.style.display = 'block';
+        document.body.style.alignItems = 'initial'; // Layout එක හරියට තියාගන්න
 
-        // User Profile එක ඇතුළට ෆොටෝ එක, නම සහ Logout බටන් එක එකතු කිරීම
         userProfile.innerHTML = `
-            <img src="${user.photoURL}" alt="${user.displayName}">
+            <img src="${user.photoURL}" alt="profile">
             <span>${user.displayName}</span>
             <button id="logout-btn" class="btn btn-logout">Logout</button>
         `;
 
-        // Logout බටන් එක වැඩ කරන විදිහ හැදීම
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            signOut(auth);
-        });
+        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
 
+        // ලොග් වූ පසු ෆිල්ම්ස් ටික ඔටෝ ලෝඩ් කරන්න ගන්නවා
+        fetchMovies(); 
     } else {
-        // පරිශීලකයා ලොග් වී නැත්නම්: Main Content සඟවා Login Card එක පෙන්වන්න
         authContainer.style.display = 'block';
         mainContent.style.display = 'none';
-        userProfile.innerHTML = ''; // Profile විස්තර අයින් කරන්න
+        document.body.style.alignItems = 'center'; 
     }
 });
 
-// 3. Google බටන් එක ක්ලික් කරපු ගමන් Pop-up එක ඕපන් කිරීම
+// Google Login ක්‍රියාවලිය
 googleBtn.addEventListener('click', () => {
-    signInWithPopup(auth, provider)
-        .then((result) => {
-            console.log("සාර්ථකව ලොග් වුණා!", result.user);
-        })
-        .catch((error) => {
-            console.error("ලොග් වීමේ දෝෂයක්:", error.message);
-            alert("ලොග් වීමට නොහැකි වුණා. නැවත උත්සාහ කරන්න.");
-        });
+    signInWithPopup(auth, provider).catch(err => alert("Error: " + err.message));
 });
+
+// 3. 🎬 API එකෙන් ෆිල්ම්ස් ඔටෝමැටිකව ඇදලා ගන්නා ශ්‍රිතය (Fetch Function)
+function fetchMovies() {
+    // Trending ෆිල්ම්ස් ලෝඩ් කිරීම
+    fetch(`${BASE_URL}/trending/movie/week?api_key=${TMDB_API_KEY}`)
+        .then(res => res.json())
+        .then(data => {
+            setupHeroBanner(data.results[0]); // පළවෙනි ෆිල්ම් එක Banner එකට ගන්නවා
+            displayMovies(data.results, 'trending-row');
+        });
+
+    // Top Rated ෆිල්ම්ස් ලෝඩ් කිරීම
+    fetch(`${BASE_URL}/movie/top_rated?api_key=${TMDB_API_KEY}`)
+        .then(res => res.json())
+        .then(data => displayMovies(data.results, 'top-rated-row'));
+}
+
+// Hero Banner එක සකස් කිරීම
+function setupHeroBanner(movie) {
+    const banner = document.getElementById('hero-banner');
+    banner.style.backgroundImage = `url('${IMG_URL + movie.backdrop_path}')`;
+    document.getElementById('hero-title').innerText = movie.title || movie.name;
+    document.getElementById('hero-description').innerText = movie.overview.substring(0, 150) + "...";
+}
+
+// චිත්‍රපට පෝස්ටර් HTML එකට එකතු කිරීම
+function displayMovies(movies, rowId) {
+    const row = document.getElementById(rowId);
+    row.innerHTML = ""; // කලින් තිබ්බ ඒවා අයින් කරන්න
+
+    movies.forEach(movie => {
+        if(movie.poster_path) {
+            const img = document.createElement('img');
+            img.src = IMG_URL + movie.poster_path;
+            img.alt = movie.title;
+            img.classList.add('movie-poster');
+            
+            // ක්ලික් කරපු ගමන් ෆිල්ම් එකේ නම පේන්න හැදීම (පසුව ප්ලේයර් එකක් දාන්න පුළුවන්)
+            img.addEventListener('click', () => alert("Playing: " + movie.title));
+            
+            row.appendChild(img);
+        }
+    });
+}
